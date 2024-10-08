@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="foodstyle.css">
+    <title>Food Ordering System</title>
+</head>
+<body>
+    <div class="container">
+        <h1>FOOD ORDERING SYSTEM</h1>
+        <div class="menu">
+            <h2>Menu</h2>
+            <div class="menu-item">
+                <span>Pizza - $190</span>
+                <button onclick="addItem('Pizza', 190)">Add to Order</button>   
+            </div>
+            <div class="menu-item">
+                <span>Burger - $95</span>
+                <button onclick="addItem('Burger', 95)">Add to Order</button>  
+            </div>
+            <div class="menu-item">
+                <span>Pasta - $200</span>
+                <button onclick="addItem('Pasta', 200)">Add to Order</button>      
+            </div>
+            <!-- Add more menu items as needed -->
+        </div>
+        <div class="order-summary">
+            <h2>Your Order</h2>
+            <ul id="orderList"></ul>
+            <div class="total">
+                Total: <span id="totalAmount">$0</span>
+            </div>
+            <button onclick="placeOrder()">Place Order</button>
+        </div>
+    </div>
+    <script>
+
+let order = [];
+let totalAmount = 0;
+
+function addItem(name, price) {
+    order.push({ name, price });
+    updateOrderSummary();
+}
+
+function updateOrderSummary() {
+    const orderList = document.getElementById('orderList');
+    orderList.innerHTML = '';
+
+    totalAmount = 0;
+
+    order.forEach((item, index) => {
+        totalAmount += item.price;
+        const listItem = document.createElement('li');
+        listItem.textContent = `${item.name} - $${item.price} `;
+        
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.onclick = () => removeItem(index);
+        listItem.appendChild(removeButton);
+        
+        orderList.appendChild(listItem);
+    });
+
+    document.getElementById('totalAmount').textContent = totalAmount.toFixed(2);
+}
+
+function removeItem(index) {
+    order.splice(index, 1);
+    updateOrderSummary();
+}
+
+function placeOrder() {
+    if (order.length === 0) {
+        alert("Your order is empty!");
+        return;
+    }
+
+    const orderSummary = order.map(item => item.name).join(', ');
+    alert(`Order Summary: ${orderSummary}\nTotal Price: $${totalAmount.toFixed(2)}`);
+    
+    order = [];
+    totalAmount = 0;
+    updateOrderSummary();
+}
+
+    </script>
+
+</body>
+</html>
